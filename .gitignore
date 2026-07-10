@@ -1,0 +1,15 @@
+# Build output
+bin/
+*.o
+*.out
+*.exe
+
+# ThreadSanitizer / misc
+*.tsan
+core
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

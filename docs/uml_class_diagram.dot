@@ -1,0 +1,26 @@
+digraph SPSCRingBuffer {
+    rankdir=TB;
+    fontname="Helvetica";
+    node [shape=record, fontname="Helvetica", fontsize=11, margin="0.15,0.1"];
+    edge [fontname="Helvetica", fontsize=10];
+    bgcolor="white";
+
+    Interface [label="{«concept»\nSPSCQueue\<T\>|+ try_push(item: const T\&) : bool\l+ try_pop(out: T\&) : bool\l+ capacity() : size_t\l}", style=filled, fillcolor="#eef2ff", color="#4338ca"];
+
+    LockFree [label="{LockFreeSPSCRingBuffer\<T\>|- capacity_ : const size_t\l- mask_ : const size_t\l- buffer_ : T*\l- head_ : atomic\<size_t\> «alignas(64)»\l- tail_ : atomic\<size_t\> «alignas(64)»\l|+ try_push(item: const T\&) : bool\l+ try_pop(out: T\&) : bool\l+ capacity() : size_t\l}", style=filled, fillcolor="#ecfdf5", color="#047857"];
+
+    Mutex [label="{MutexSPSCRingBuffer\<T\>|- capacity_ : const size_t\l- mask_ : const size_t\l- buffer_ : T*\l- mutex_ : std::mutex\l- head_ : size_t\l- tail_ : size_t\l|+ try_push(item: const T\&) : bool\l+ try_pop(out: T\&) : bool\l+ capacity() : size_t\l}", style=filled, fillcolor="#fff7ed", color="#c2410c"];
+
+    StressTest [label="{stress_test.cpp|+ run_stress_test\<QueueT\>() : bool\l}", shape=box, style=filled, fillcolor="#f9fafb", color="#6b7280"];
+    Benchmark [label="{benchmark.cpp|+ run_benchmark\<QueueT\>() : BenchResult\l}", shape=box, style=filled, fillcolor="#f9fafb", color="#6b7280"];
+
+    LockFree -> Interface [arrowhead=empty, style=dashed, label="satisfies\n(static duck typing)"];
+    Mutex -> Interface [arrowhead=empty, style=dashed, label="satisfies\n(static duck typing)"];
+
+    StressTest -> LockFree [arrowhead=vee, style=dotted, label="instantiates\n\<uint64_t\>"];
+    StressTest -> Mutex [arrowhead=vee, style=dotted, label="instantiates\n\<uint64_t\>"];
+    Benchmark -> LockFree [arrowhead=vee, style=dotted, label="instantiates\n\<uint64_t\>"];
+    Benchmark -> Mutex [arrowhead=vee, style=dotted, label="instantiates\n\<uint64_t\>"];
+
+    { rank=same; LockFree; Mutex; }
+}
