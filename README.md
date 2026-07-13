@@ -105,5 +105,5 @@ Makefile
 
 ## Scope
 
-SPSC only. Supporting multiple producers or consumers is a meaningfully different, harder problem — multiple threads would be racing to update the same index, which this design's single-writer-per-index assumption doesn't handle. Deliberately left out here rather than solved incorrectly.
+SPSC only. Supporting multiple producers or consumers is a meaningfully different, harder problem — multiple threads would be racing to update the same index, which this design's single-writer-per-index assumption doesn't handle. 
 
